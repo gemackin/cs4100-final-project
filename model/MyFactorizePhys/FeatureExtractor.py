@@ -2,6 +2,15 @@ import torch
 from torch import nn
 
 
+"""
+For now, this code is copied from the authors' repository.
+
+I wish to be able to begin testing without figuring out whatever is going on here.
+
+I will rewrite this all myself another time.
+"""
+
+
 nf = [8, 12, 16]
 
 
