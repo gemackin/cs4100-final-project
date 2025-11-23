@@ -7,12 +7,10 @@ S. Bobbia, R. Macwan, Y. Benezeth, A. Mansouri, J. Dubois, "Unsupervised skin ti
 import glob
 import os
 import re
-from multiprocessing import Pool, Process, Value, Array, Manager
 
 import cv2
 import numpy as np
 from dataset.data_loader.BaseLoader import BaseLoader
-from tqdm import tqdm
 
 
 class UBFCrPPGLoader(BaseLoader):

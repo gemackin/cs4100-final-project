@@ -25,19 +25,16 @@ def tsince(t, abbrev=True, sep=' '):
         if t < 1: break
     return sep.join(output[::-1])
 
+
 # Returns the size of a given file/directory
 def getsize(path, prec=2, string=True):
     size = 0
     if os.path.isfile(path):
-        try:
-            size += os.path.getsize(path)
-        except:
-            pass
+        try: size += os.path.getsize(path)
+        except: pass
     if os.path.isdir(path):
-        try:
-            subpaths = os.listdir(path)
-        except:
-            subpaths = []
+        try: subpaths = os.listdir(path)
+        except: subpaths = []
         for sub in subpaths:
             sub = os.path.join(path, sub)
             size += getsize(sub, prec, False)
