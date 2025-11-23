@@ -6,7 +6,7 @@ Jitesh Joshi, Sos S. Agaian, and Youngjun Cho
 
 import torch
 import torch.nn as nn
-from neural_methods.model.FactorizePhys.FSAM import FeaturesFactorizationModule
+from .FSAM import FeaturesFactorizationModule
 
 nf = [8, 12, 16]
 
@@ -165,7 +165,7 @@ class BVP_Head(nn.Module):
 
 
 class FactorizePhys(nn.Module):
-    def __init__(self, frames, md_config, in_channels=3, dropout=0.1, device=torch.device("cpu"), debug=False):
+    def __init__(self, frames=None, md_config=model_config, in_channels=3, dropout=0.1, device=torch.device("cpu"), debug=False):
         super(FactorizePhys, self).__init__()
         self.debug = debug
 
