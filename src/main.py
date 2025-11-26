@@ -1,6 +1,8 @@
 # Absolute imports
 import torch
 import os
+import random
+import numpy as np
 from itertools import product
 # Relative file imports
 from .utils import tprint, tsince
@@ -14,6 +16,12 @@ from src.model.MyFactorizePhys.MyFactorizePhys import MyFactorizePhys
 from src.training.loss import NegativePearsonCorrelationLoss
 from src.training.ModelTrainer import ModelTrainer
 from src.plot import plot_losses
+
+
+random.seed(0)
+np.random.seed(0)
+torch.manual_seed(0)
+
 
 
 MODELS = {
@@ -46,7 +54,7 @@ def train_model(model_name, model, dataset_name, dataloader):
     loss_fn = NegativePearsonCorrelationLoss()
     optimizer = torch.optim.SGD(model.parameters(), lr=1e-4, momentum=0.9)
     trainer = ModelTrainer(model, optimizer, loss_fn)
-    losses = trainer.train(dataloader, num_epochs=30)
+    losses = trainer.train(dataloader, num_epochs=50)
     tprint('Finished training in', tsince(start_time))
     torch.save(model.state_dict(), f'model/{model_name}.pth')
     plot_losses(losses, 'r', model_name=model_name)

@@ -1,5 +1,6 @@
 data/UBFC-rPPG_2/
 data/preprocessed/
+data/preprocessed.zip
 src/__pycache__/
 src/dataset/__pycache__/
 src/dataset/data_loader/__pycache__/
