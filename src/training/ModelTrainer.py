@@ -1,6 +1,9 @@
 import torch
 from torch import nn
+import numpy as np
 import tqdm # Progress bar
+from torch.autograd import Variable
+from src.utils import tprint
     
 
 class ModelTrainer:
@@ -12,15 +15,19 @@ class ModelTrainer:
         self.device = torch.device(device)
 
 
+    # @torch.no_grad()
     def _normalize_tensor(self, y):
         return (y - torch.mean(y)) / torch.std(y)
 
 
     def _forward_model(self, X, y):
-        X, y = X.to(self.device), y.to(self.device)
+        X = torch.tensor(X, requires_grad=True).to(self.device)
+        X = X.view((1, *X.shape)) # Accounting for funky stuff with FactorizePhys
+        y = torch.tensor(y).to(self.device)
         if len(y.shape) > 2: y = y[..., 0] # The authors say there is multi-signal data
         y = self._normalize_tensor(y)
         y_pred = self.model(X)
+        if isinstance(y_pred, tuple): y_pred = y_pred[0]
         y_pred = self._normalize_tensor(y_pred)
         return y_pred, y
 
@@ -38,13 +45,14 @@ class ModelTrainer:
         self.model.train() # Set model to training mode
         losses = []
         for epoch in range(num_epochs):
-            tbar = tqdm(dataloader, ncols=80)
+            tprint('Train epoch', epoch + 1 )
             losses.append([])
-            for X, y in tbar: # Looping through batches
-                tbar.set_description(f'Train epoch {epoch}')
+            for X, y, sub_id, split_id in dataloader: # Looping through batches
+                # tprint(f'Processing split sub-{sub_id}_split-{split_id}...')
                 loss = self._train_batch(X, y)
                 losses[-1].append(loss)
-        return losses
+            print(f'L={round(np.mean(losses[-1]), 2)}')
+        return list(map(np.mean, losses))
                 
 
     def evaluate(self, dataloader, func):

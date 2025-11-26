@@ -12,8 +12,8 @@ import re
 from math import ceil
 from scipy import signal
 from scipy import sparse
-from unsupervised_methods.methods import POS_WANG
-from unsupervised_methods import utils
+from src.dataset.unsupervised_methods import POS_WANG
+from src.dataset.unsupervised_methods import utils
 import math
 import multiprocessing as mp
 
@@ -30,7 +30,7 @@ import pandas as pd
 import torch
 from torch.utils.data import Dataset
 from tqdm import tqdm
-from retinaface import RetinaFace   # Source code: https://github.com/serengil/retinaface
+# from retinaface import RetinaFace   # Source code: https://github.com/serengil/retinaface
 
 
 class BaseLoader(Dataset):
@@ -70,7 +70,7 @@ class BaseLoader(Dataset):
         self.config_data = config_data
 
         if self.do_preprocess and self.preprocess_frames:
-            from dataset.data_loader.face_detector.YOLO5Face import YOLO5Face
+            from src.dataset.data_loader.face_detector.YOLO5Face import YOLO5Face
             if 'Y5F' in self.config_data.PREPROCESS.CROP_FACE.BACKEND:
                 self.Y5FObj = YOLO5Face(self.config_data.PREPROCESS.CROP_FACE.BACKEND, device)
 
@@ -325,9 +325,10 @@ class BaseLoader(Dataset):
             else:
                 face_box_coor = face_zone[0]
         elif backend == "RF":
+            raise NotImplementedError('RetinaFace functionality has been removed')
             # Use a TensorFlow-based RetinaFace implementation for face detection
             # This utilizes both the CPU and GPU
-            res = RetinaFace.detect_faces(frame[:, :, :3].astype(np.uint8))
+            # res = RetinaFace.detect_faces(frame[:, :, :3].astype(np.uint8))
 
             if len(res) > 0:
                 # Pick the highest score

@@ -1,1 +1,12 @@
 data/UBFC-rPPG_2/
+data/preprocessed/
+src/__pycache__/
+src/dataset/__pycache__/
+src/dataset/data_loader/__pycache__/
+src/dataset/data_loader/face_detector/__pycache__/
+src/dataset/data_loader/face_detector/model/__pycache__/
+src/dataset/data_loader/face_detector/utils/__pycache__/
+src/dataset/unsupervised_methods/__pycache__/
+src/training/__pycache__/
+src/model/FactorizePhys/__pycache__/
+src/model/MyFactorizePhys/__pycache__/

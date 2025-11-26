@@ -37,7 +37,7 @@ def getsize(path, prec=2, string=True):
         except: subpaths = []
         for sub in subpaths:
             sub = os.path.join(path, sub)
-            size += getsize(sub, prec, False)
+            size += getsize(sub, prec + 1, False)
     if not string: return size
     i = min(np.log10(size) // 3, 4) if size else 0
     size = round(size / (1000 ** i), prec)
