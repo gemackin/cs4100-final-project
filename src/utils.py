@@ -42,3 +42,11 @@ def getsize(path, prec=2, string=True):
     i = min(np.log10(size) // 3, 4) if size else 0
     size = round(size / (1000 ** i), prec)
     return f'{size} {["", *"KMGT"][int(i)]}B'
+
+
+def average_dictionary(dicts):
+    avg_dict = {k:0 for k in dicts[0].keys()}
+    for d in dicts:
+        for k, v in d.items():
+            avg_dict[k] += v / len(dicts)
+    return avg_dict

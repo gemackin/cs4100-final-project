@@ -3,7 +3,8 @@ from torch import nn
 import numpy as np
 import tqdm # Progress bar
 from torch.autograd import Variable
-from src.utils import tprint
+from src.utils import tprint, average_dictionary
+from src.training.metrics import calculate_test_metrics
     
 
 class ModelTrainer:
@@ -45,21 +46,23 @@ class ModelTrainer:
         self.model.train() # Set model to training mode
         losses = []
         for epoch in range(num_epochs):
-            tprint('Train epoch', epoch + 1 )
+            tprint('Train epoch', epoch + 1)
             losses.append([])
             for X, y, sub_id, split_id in dataloader: # Looping through batches
                 # tprint(f'Processing split sub-{sub_id}_split-{split_id}...')
                 loss = self._train_batch(X, y)
                 losses[-1].append(loss)
-            print(f'L={round(np.mean(losses[-1]), 2)}')
+            print(f'L={round(np.mean(losses[-1]), 4)}')
+            if epoch % 5 == 0: # Just so I don't go insane waiting around
+                torch.save(self.model.state_dict(), f'model/checkpoint.pth')
         return list(map(np.mean, losses))
                 
 
-    def evaluate(self, dataloader, func):
+    def evaluate(self, dataloader):
         self.model.eval() # Set model to evaluation mode
-        outputs = []
+        metrics = []
         with torch.no_grad():
-            for X, y in dataloader:
+            for X, y, sub_id, split_id in dataloader:
                 y_pred, y = self._forward_model(X, y)
-                outputs.append(func(y_pred, y))
-        return outputs
+                metrics.append(calculate_test_metrics(y_pred, y))
+        return average_dictionary(metrics)

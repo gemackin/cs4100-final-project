@@ -31,7 +31,7 @@ class NetworkHead(nn.Module):
         x = x - x.min() # Move to zero
         mask, error = self.FSAM(x)
         mask = mask - mask.min() # Move to zero
-        x_factorized = self.norm(torch.mul(x + self.bias, mask + self.bias)) # Residual connection?
+        x_factorized = self.norm(torch.mul(x + self.bias, mask + self.bias)) # Residual connections
         output = self.conv2(x + x_factorized).view(-1)
         return output
 
